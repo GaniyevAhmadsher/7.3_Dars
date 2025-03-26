@@ -16,8 +16,21 @@ export class UserService {
     }
 
     findOne(id: number): object {
-        const userOne = this.#users.find((v) => v.id === id)
-        if (userOne) return userOne
-        else throw new HttpException("Not Found", 404)
+        const userOne = this.#users.find((user) => user.id === id)
+        if (!userOne) throw new HttpException("Not Found", 404); return userOne
+    }
+
+    update(id: number, body: IUser): object {
+        const userIndex: number = this.#users.findIndex((user) => user.id === id)
+        if (userIndex < 0) throw new HttpException("Not Found", 404)
+
+        this.#users[userIndex] = { id, ...body }; return this.#users[userIndex]
+    }
+
+    delete(id: number): object {
+        const userIndex: number = this.#users.findIndex((user) => user.id === id)
+        if (userIndex < 0) throw new HttpException("Not Found", 404)
+
+        return this.#users.splice(userIndex, 1);
     }
 }
